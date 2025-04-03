@@ -21,7 +21,7 @@ export default (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'X-IPTV-App');
 
-  res.status(200).send(file);
+  res.status(200).send('Test Playlist');
 };
 
 
