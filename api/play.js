@@ -6,9 +6,24 @@ export default (req, res) => {
   console.log('Request Headers:', req.headers);
 
   const filePath = path.join(process.cwd(), 'play.txt');
-  const file = fs.readFileSync(filePath);
+  let file;
+
+  try {
+    file = fs.readFileSync(filePath, 'utf-8'); // Read as UTF-8
+  } catch (error) {
+    console.error('Error reading file:', error);
+    res.status(500).send('Internal Server Error');
+    return;
+  }
 
   const isIPTVRequest = req.headers['x-iptv-app'] === 'true';
+
+  // Allow browser access for testing/debugging
+  if (req.headers['user-agent'] && req.headers['user-agent'].includes('Mozilla')) {
+      res.setHeader('Content-Type', 'text/plain');
+      res.status(200).send(file);
+      return;
+  }
 
   if (!isIPTVRequest) {
     console.log('Forbidden: No IPTV App header or incorrect header');
@@ -21,7 +36,6 @@ export default (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'X-IPTV-App');
 
-  res.status(200).send('Test Playlist');
+  res.status(200).send(file);
 };
-
 
