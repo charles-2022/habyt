@@ -18,12 +18,11 @@ export default (req, res) => {
 
   const isIPTVRequest = req.headers['x-iptv-app'] === 'true';
 
-  // Browser download
+  // Allow browser access for testing/debugging
   if (req.headers['user-agent'] && req.headers['user-agent'].includes('Mozilla')) {
-    res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Content-Disposition', 'attachment; filename="playlist.txt"');
-    res.status(200).send(file);
-    return;
+      res.setHeader('Content-Type', 'text/plain');
+      res.status(200).send(file);
+      return;
   }
 
   if (!isIPTVRequest) {
